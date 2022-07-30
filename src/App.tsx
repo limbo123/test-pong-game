@@ -44,7 +44,6 @@ const App: FC = () => {
       setIsConnected(true);
     };
     socket.current.onmessage = (event: any) => {
-      console.log("message");
       const message = JSON.parse(event.data);
       switch (message.type) {
         case "role":
@@ -62,7 +61,6 @@ const App: FC = () => {
           setMessages((prev) => [message.message, ...prev]);
           break;
         case "opponentReady":
-          console.log("ready");
           setMessages((prev) => [message.message, ...prev]);
           break;
         case "roomFull":
