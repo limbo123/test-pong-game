@@ -31,7 +31,7 @@ const App: FC = () => {
   const connect = () => {
     if (isConnected) return;
 
-    socket.current = new WebSocket("ws://localhost:5000");
+    socket.current = new WebSocket("wss://test-pong-game.herokuapp.com");
 
     socket.current.onopen = () => {
       console.log("open");
