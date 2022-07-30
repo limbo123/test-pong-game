@@ -1,0 +1,35 @@
+.mouseArea {
+    padding-top: 100px;
+    height: 1000px;
+    display: flex;
+    width: 100%;
+    /* justify-content: center; */
+}
+
+.gameArea {
+  position: relative;
+  width: 1000px;
+  height: 500px;
+  background: #000;
+}
+
+.gameArea h1 {
+  color: #fff;
+  text-align: center;
+  font-size: 30px;
+}
+
+.platform {
+  position: absolute;
+  width: 14px;
+  height: 100px;
+  background: #00ab25;
+  top: 110px;
+  overflow: hidden;
+  outline: none;
+  /* border-radius: 10px; */
+}
+
+.guestPlatform {
+    right: 0;
+}
