@@ -25,7 +25,6 @@ wss.on("connection", (ws) => {
     switch (type) {
       case "join":
         joinRoom(roomId, userId, ws);
-        ws.send(JSON.stringify({type: "rooms", rooms}));
         break;
       case "getReady":
         getReady(roomId, userId);
@@ -54,7 +53,7 @@ const joinRoom = (roomId, userId, ws) => {
   ws.send(JSON.stringify({type: "role", isGuest}));
   Object.entries(rooms[roomId]).forEach(([id, user]) => {
     if (id !== userId) {
-      user.socket.send(JSON.stringify({type: "enter", message: "player has entered the game", isTwoPlayers: true}));
+      user.socket.send(JSON.stringify({type: "enter", message: "player has entered the game", isTwoPlayers: true, rooms: Object.keys(rooms)}));
     }
   });
   console.log(Object.entries(rooms).length);

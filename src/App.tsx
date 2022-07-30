@@ -47,15 +47,13 @@ const App: FC = () => {
       console.log("message");
       const message = JSON.parse(event.data);
       switch (message.type) {
-        case "rooms":
-          console.log(message.rooms);
-          break;
         case "role":
           setIsGuest(message.isGuest);
           break;
         case "enter":
           setIsTwoPlayers(message.isTwoPlayers);
           setMessages((prev) => [message.message, ...prev]);
+          console.log(message.rooms);
           break;
         case "leave":
           setIsTwoPlayers(message.isTwoPlayers);
