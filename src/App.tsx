@@ -47,6 +47,9 @@ const App: FC = () => {
       console.log("message");
       const message = JSON.parse(event.data);
       switch (message.type) {
+        case "rooms":
+          console.log(message.rooms);
+          break;
         case "role":
           setIsGuest(message.isGuest);
           break;
@@ -156,7 +159,7 @@ const App: FC = () => {
               )}
             </>
           ) : (
-            <p>Waiting for opponent...</p>
+            <p className={styles.waitingTxt}>Waiting for opponent...</p>
           )}
           {isGameStarted && (
             <GameArea

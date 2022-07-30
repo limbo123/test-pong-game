@@ -15,7 +15,6 @@ const WebSocket = require("ws");
 const wss = new WebSocket.Server({ server });
 
 const rooms = {};
-
 wss.on("connection", (ws) => {
   const userId = uuidv4();
 
@@ -26,6 +25,7 @@ wss.on("connection", (ws) => {
     switch (type) {
       case "join":
         joinRoom(roomId, userId, ws);
+        ws.send(JSON.stringify({type: "rooms", rooms}));
         break;
       case "getReady":
         getReady(roomId, userId);
