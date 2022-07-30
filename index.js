@@ -3,7 +3,14 @@ const path = require("path");
 const express = require("express");
 const app = express();
 app.use(express.static(path.join(__dirname, "build")));
-const server = require("http").createServer(app)
+app.use(express.static("public"));
+app.use((req, res, next) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+})
+const server = require("http").createServer(app);
+server.listen(process.env.PORT || 5000, () => {
+  console.log("server running on port: 5000");
+})
 const WebSocket = require("ws");
 const wss = new WebSocket.Server({ server });
 
@@ -114,6 +121,3 @@ const resetBall = (roomId, scoredPlayer) => {
   });
 }
 
-server.listen(5000, () => {
-  console.log("server running on port: 5000");
-})
