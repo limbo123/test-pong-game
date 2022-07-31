@@ -26,7 +26,7 @@ wss.on("connection", (ws) => {
       case "createRoom":
         createRoom(userId, ws);
         break;
-      case "join":
+      case "joinRoom":
         joinRoom(roomId, userId, ws);
         break;
       case "getReady":
