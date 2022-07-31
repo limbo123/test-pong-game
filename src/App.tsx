@@ -16,6 +16,7 @@ const App: FC = () => {
   const [messages, setMessages] = useState<string[]>([]);
   const [isTwoPlayers, setIsTwoPlayers] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
+  const [roomId, setRoomId] = useState<string>("");
 
   const resetOnLeave = () => {
     setIsConnected(false);
@@ -28,7 +29,7 @@ const App: FC = () => {
     setIsTwoPlayers(false);
   };
 
-  const connect = () => {
+  const connect = (connectingType: string) => {
     if (isConnected) return;
 
     socket.current = new WebSocket("wss://limbo123-websocket-pong-game.herokuapp.com");
@@ -36,7 +37,7 @@ const App: FC = () => {
     socket.current.onopen = () => {
       console.log("open");
       const joinMessage = {
-        type: "join",
+        type: connectingType,
         roomId: room,
         newLocation: null,
       };
@@ -48,6 +49,7 @@ const App: FC = () => {
       switch (message.type) {
         case "role":
           setIsGuest(message.isGuest);
+          setRoomId(message.roomId);
           break;
         case "enter":
           setIsTwoPlayers(message.isTwoPlayers);
@@ -92,7 +94,7 @@ const App: FC = () => {
   const getReady = () => {
     const isReadyMessage = {
       type: "getReady",
-      roomId: room,
+      roomId: roomId,
       newLocation: null,
     };
     socket.current.send(JSON.stringify(isReadyMessage));
@@ -101,7 +103,7 @@ const App: FC = () => {
 
   const leaveRoom = () => {
     const leaveMessage = {
-      roomId: room,
+      roomId: roomId,
       newLocation: null,
       type: "leave",
     };
@@ -114,6 +116,15 @@ const App: FC = () => {
       {!isConnected ? (
         <div className={styles.startingForm}>
           <h1 className={styles.logo}>PONG GAME</h1>
+          <button
+            className={classNames(styles.button, styles.purpleBtn)}
+            onClick={() => connect("createRoom")}
+          >
+            create room
+          </button>
+
+          <h2 className={styles.orButton}>Or</h2>
+
           <input
             type="text"
             value={room}
@@ -122,7 +133,7 @@ const App: FC = () => {
           />
           <button
             className={classNames(styles.button, styles.greenBtn)}
-            onClick={connect}
+            onClick={() => connect("joinRoom")}
           >
             connect to room
           </button>
@@ -135,7 +146,7 @@ const App: FC = () => {
               return <div key={uuidv4()}>{msg}</div>;
             })}
           </div>
-          <h1 className={styles.joinCode}>Code to join your room: {room}</h1>
+          {!isGuest && <h1 className={styles.joinCode}>Code to join your room: {roomId}</h1>}
           <button
             onClick={leaveRoom}
             className={classNames(styles.button, styles.redBtn)}
@@ -161,7 +172,7 @@ const App: FC = () => {
             <GameArea
               score={score}
               isGuest={isGuest}
-              room={room}
+              room={roomId}
               socket={socket.current}
               isResetting={isResetting}
               cancelIsResetting={() => setIsResetting(false)}

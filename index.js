@@ -23,6 +23,9 @@ wss.on("connection", (ws) => {
     const { type, roomId } = msg;
 
     switch (type) {
+      case "createRoom":
+        createRoom(userId, ws);
+        break;
       case "join":
         joinRoom(roomId, userId, ws);
         break;
@@ -42,15 +45,28 @@ wss.on("connection", (ws) => {
   });
 });
 
+const createRoom = (userId, ws) => {
+  console.log("creating room");
+  const roomId = uuidv4();
+  rooms[roomId] = {};
+  rooms[roomId][userId] = { socket: ws, guest: false, ready: false, score: 0 };
+  ws.send(JSON.stringify({type: "role", isGuest: false, roomId}));
+}
+
 const joinRoom = (roomId, userId, ws) => {
-  if (!rooms[roomId]) rooms[roomId] = {};
+  console.log("joining room");
+
+  if (!rooms[roomId]) {
+    ws.send(JSON.stringify({type: "roomIsNotFound", error: "room isn't exist"}));
+    return;
+  };
   if (Object.keys(rooms[roomId]).length === 2) {
       ws.send(JSON.stringify({type: "roomFull", error: "the room is already full"}));
       return;
   };
-  const isGuest = Object.keys(rooms[roomId]).length === 1 ? true : false;
-  if (!rooms[roomId][userId]) rooms[roomId][userId] = {socket: ws, guest: isGuest, ready: false, score: 0};
-  ws.send(JSON.stringify({type: "role", isGuest}));
+  // const isGuest = Object.keys(rooms[roomId]).length === 1 ? true : false;
+  if (!rooms[roomId][userId]) rooms[roomId][userId] = {socket: ws, guest: true, ready: false, score: 0};
+  ws.send(JSON.stringify({type: "role", isGuest: true, roomId}));
   Object.entries(rooms[roomId]).forEach(([id, user]) => {
     if (id !== userId) {
       user.socket.send(JSON.stringify({type: "enter", message: "player has entered the game", isTwoPlayers: true, rooms: Object.keys(rooms)}));
