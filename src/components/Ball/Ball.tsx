@@ -12,6 +12,7 @@ interface BallProps {
 let speedX = -3;
 let speedY = 2;
 let activePlatform = 1;
+let canRestart = true;
 
 const Ball: FC<BallProps> = ({ isGuest, socket, roomId, isResetting, cancelIsResetting }) => {
   const [positionX, setPositionX] = useState(500);
@@ -79,10 +80,8 @@ const Ball: FC<BallProps> = ({ isGuest, socket, roomId, isResetting, cancelIsRes
       speedY = speedY * 1.05;
     }
     if (ballLeft <= 0 || ballLeft >= areaWidth - 20) {
-      console.log("resetting");
-      
-
-
+      if(!canRestart) return;
+      canRestart = false;
       activePlatform = 1;
       if(!isGuest) {
         const resetMessage = {
@@ -102,6 +101,7 @@ const Ball: FC<BallProps> = ({ isGuest, socket, roomId, isResetting, cancelIsRes
 
   useEffect(() => {
     if(isResetting) {
+      canRestart = true;
       speedX = -3;
       speedY = 2;
       setPositionX(startPos);
