@@ -146,7 +146,7 @@ const App: FC = () => {
               return <div key={uuidv4()}>{msg}</div>;
             })}
           </div>
-          {!isGuest && <h1 className={styles.joinCode}>Code to join your room: {roomId}</h1>}
+          {!isGuest && <h1 className={styles.joinCode}>Code to join your room: <span>{roomId}</span></h1>}
           <button
             onClick={leaveRoom}
             className={classNames(styles.button, styles.redBtn)}
