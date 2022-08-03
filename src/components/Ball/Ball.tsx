@@ -101,11 +101,11 @@ const Ball: FC<BallProps> = ({ isGuest, socket, roomId, isResetting, cancelIsRes
 
   useEffect(() => {
     if(isResetting) {
-      canRestart = true;
       speedX = -3;
       speedY = 2;
       setPositionX(startPos);
       setPositionY(100);
+      canRestart = true;
       cancelIsResetting();
     }
   }, [isResetting]);
