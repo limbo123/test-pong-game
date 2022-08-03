@@ -2,12 +2,13 @@ const { v4: uuidv4 } = require("uuid");
 const path = require("path");
 const express = require("express");
 const app = express();
+const http = require("http");
 app.use(express.static(path.join(__dirname, "build")));
 app.use(express.static("public"));
 app.use((req, res, next) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 })
-const server = require("http").createServer(app);
+const server = http.createServer(app);
 server.listen(process.env.PORT || 5000, () => {
   console.log("server running on port: 5000");
 })
@@ -135,4 +136,8 @@ const resetBall = (roomId, scoredPlayer) => {
       user.socket.send(JSON.stringify({type: "newScore", score: newScore}));
   });
 }
+
+setInterval(() => {
+  http.get("https://limbo123-websocket-pong-game.herokuapp.com");
+}, 600000);
 
