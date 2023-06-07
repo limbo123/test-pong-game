@@ -1,5 +1,5 @@
 # JS Real-time Pong game
-**Important Note. It isn't a serious game so there are some out of sync bugs due to the use of websockets. I created this game only for practising purposes.**
+**Important Note. It isn't a serious game so there are some out of sync bugs due to the use of websockets. I created this game only for practice purposes.**
 
 **Important Note 2. The game deployed on heroku, and can go sleep every 30 minutes. So, if app is loading about 40 seconds, it means the server is building client and then giving a static files to browser.**
 
